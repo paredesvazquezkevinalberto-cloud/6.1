@@ -1,0 +1,43 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Parámetros
+R = 1000
+C = 0.001
+Vfuente = 5
+x0 = 0
+y0 = 0   # V(0) = 0
+xf = 5
+n = 20
+h = (xf - x0) / n
+
+# Definición de la EDO: dV/dt = (Vfuente - V)/(R*C)
+def f(t, V):
+    return (Vfuente - V) / (R*C)
+
+# Método de Euler
+t_vals = [x0]
+V_vals = [y0]
+t = x0
+V = y0
+for i in range(n):
+    V = V + h * f(t, V)
+    t = t + h
+    t_vals.append(t)
+    V_vals.append(V)
+
+# Solución analítica
+t_exact = np.linspace(x0, xf, 100)
+V_exact = Vfuente * (1 - np.exp(-t_exact/(R*C)))
+
+# Gráfica
+plt.figure(figsize=(8,5))
+plt.plot(t_vals, V_vals, 'o-', label="Euler", color="blue")
+plt.plot(t_exact, V_exact, '-', label="Analítica", color="red")
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Voltaje (V)")
+plt.title("Carga de un capacitor - Método de Euler")
+plt.legend()
+plt.grid(True)
+plt.show()
