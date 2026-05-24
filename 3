@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parámetros
+T0 = 90
+Tamb = 25
+k = 0.07
+x0 = 0
+y0 = T0
+xf = 30
+n = 30
+h = (xf - x0) / n
+
+# Definición de la EDO: dT/dt = -k(T - Tamb)
+def f(t, T):
+    return -k*(T - Tamb)
+
+# Método de Euler
+t_vals = [x0]
+T_vals = [y0]
+t = x0
+T = y0
+for i in range(n):
+    T = T + h * f(t, T)
+    t = t + h
+    t_vals.append(t)
+    T_vals.append(T)
+
+# Solución analítica
+t_exact = np.linspace(x0, xf, 100)
+T_exact = Tamb + (T0 - Tamb)*np.exp(-k*t_exact)
+
+# Gráfica
+plt.figure(figsize=(8,5))
+plt.plot(t_vals, T_vals, 'o-', label="Euler", color="blue")
+plt.plot(t_exact, T_exact, '-', label="Analítica", color="red")
+plt.xlabel("Tiempo (min)")
+plt.ylabel("Temperatura (°C)")
+plt.title("Enfriamiento de un cuerpo - Método de Euler")
+plt.legend()
+plt.grid(True)
+plt.show()
