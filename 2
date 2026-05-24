@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parámetros
+g = 9.81
+m = 2
+k = 0.5
+x0 = 0
+y0 = 0   # v(0) = 0
+xf = 10
+n = 50
+h = (xf - x0) / n
+
+# Definición de la EDO: dv/dt = g - (k/m)*v
+def f(t, v):
+    return g - (k/m)*v
+
+# Método de Euler
+t_vals = [x0]
+v_vals = [y0]
+t = x0
+v = y0
+for i in range(n):
+    v = v + h * f(t, v)
+    t = t + h
+    t_vals.append(t)
+    v_vals.append(v)
+
+# Solución analítica
+t_exact = np.linspace(x0, xf, 100)
+v_exact = (m*g/k) * (1 - np.exp(-(k/m)*t_exact))
+
+# Gráfica
+plt.figure(figsize=(8,5))
+plt.plot(t_vals, v_vals, 'o-', label="Euler", color="blue")
+plt.plot(t_exact, v_exact, '-', label="Analítica", color="red")
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Velocidad (m/s)")
+plt.title("Caída libre con resistencia - Método de Euler")
+plt.legend()
+plt.grid(True)
+plt.show()
